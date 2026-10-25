@@ -1,0 +1,5 @@
+Correctif Private Access COUSOUM INC
+
+Ajouter le dossier access a la racine du depot GitHub cousoum-inc.
+La page utilise ../style.css, donc elle reutilise le style.css deja present a la racine.
+Le bouton Private Access de l'accueil pointe deja vers access/index.html.
