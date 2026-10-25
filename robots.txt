@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /access/
+Sitemap: https://DOMAINE-COUSOUM/sitemap.xml
