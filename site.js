@@ -1,1 +1,16 @@
-const q=(s,c=document)=>c.querySelector(s),qa=(s,c=document)=>[...c.querySelectorAll(s)];const header=q('.header');addEventListener('scroll',()=>header?.classList.toggle('scrolled',scrollY>30),{passive:true});const b=q('[data-menu]'),m=q('#mobileMenu');if(b&&m){const close=()=>{m.hidden=true;b.setAttribute('aria-expanded','false');document.body.style.overflow=''};b.onclick=()=>{const o=b.getAttribute('aria-expanded')==='true';b.setAttribute('aria-expanded',String(!o));m.hidden=o;document.body.style.overflow=o?'':'hidden'};qa('a',m).forEach(a=>a.onclick=close);addEventListener('keydown',e=>{if(e.key==='Escape')close()})}const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});qa('.reveal').forEach(x=>io.observe(x));if(matchMedia('(pointer:fine)').matches&&!matchMedia('(prefers-reduced-motion: reduce)').matches){qa('[data-parallax]').forEach(el=>{el.addEventListener('pointermove',e=>{const r=el.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;el.querySelector('img').style.transform=`scale(1.06) translate(${x*-10}px,${y*-10}px)`});el.addEventListener('pointerleave',()=>el.querySelector('img').style.transform='')})}
+const toggle = document.querySelector('.menu-toggle');
+const nav = document.querySelector('.navigation');
+if (toggle && nav) {
+  toggle.addEventListener('click', () => {
+    const open = nav.classList.toggle('is-open');
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.textContent = open ? 'Fermer' : 'Menu';
+  });
+  nav.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
+    nav.classList.remove('is-open');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.textContent = 'Menu';
+  }));
+}
+const year = document.querySelector('#year');
+if (year) year.textContent = new Date().getFullYear();

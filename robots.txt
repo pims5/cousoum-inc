@@ -1,4 +1,3 @@
 User-agent: *
 Allow: /
-Disallow: /access/
 Sitemap: https://pims5.github.io/cousoum-inc/sitemap.xml

@@ -1,11 +1,12 @@
 {
-  "name": "COUSOUM INC",
+  "name": "COUSOUM · INC",
   "short_name": "COUSOUM",
   "start_url": "/cousoum-inc/",
+  "scope": "/cousoum-inc/",
   "display": "standalone",
   "background_color": "#06151d",
   "theme_color": "#06151d",
   "icons": [
-    {"src":"assets/images/apple-touch-icon.png","sizes":"180x180","type":"image/png"}
+    { "src": "apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
   ]
 }
