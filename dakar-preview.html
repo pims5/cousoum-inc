@@ -1,0 +1,52 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Aperçu — section Dakar · COUSOUM · INC</title>
+<style>body{margin:0;background:#06151d;color:#f4f0e7;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}.pv{padding:40px 24px;text-align:center;color:#8aa1a8;font-size:14px}</style></head><body>
+<div class="pv">Aperçu de la section Dakar — le reste du site viendrait ici.</div>
+<!-- ===== SECTION DAKAR · IDENTITÉ SÉNÉGAL — à coller dans index.html (bloc autonome, classes préfixées .dk-) ===== -->
+<section class="dk" data-dk aria-label="Dakar, Sénégal" style="background-image:url(assets/dakar/dakar-01.webp)">
+  <ul class="dk-pool" hidden>
+    <li data-src="assets/dakar/dakar-01.webp"></li><li data-src="assets/dakar/dakar-02.webp"></li>
+    <li data-src="assets/dakar/dakar-03.webp"></li><li data-src="assets/dakar/dakar-04.webp"></li>
+    <li data-src="assets/dakar/dakar-05.webp"></li><li data-src="assets/dakar/dakar-06.webp"></li>
+    <li data-src="assets/dakar/dakar-07.webp"></li><li data-src="assets/dakar/dakar-08.webp"></li>
+    <li data-src="assets/dakar/dakar-09.webp"></li>
+  </ul>
+  <div class="dk-stage" aria-hidden="true"></div>
+  <div class="dk-in">
+    <span class="dk-flag" aria-hidden="true"><i style="background:#00853F"></i><i style="background:#FDEF42"></i><i style="background:#E31B23"></i></span>
+    <p class="dk-eye">Dakar · Sénégal</p>
+    <h2>Construire l’inédit.<br>Rendre l’avenir tangible.</h2>
+    <p class="dk-sub">COUSOUM · INC, maison d’innovation basée à Dakar.</p>
+  </div>
+</section>
+<style>
+.dk{position:relative;display:flex;align-items:flex-end;min-height:min(92vh,880px);background:#06151d center/cover no-repeat;color:#f4f0e7;overflow:hidden;isolation:isolate}
+.dk-stage{position:absolute;inset:0;display:grid;grid-template-columns:repeat(var(--dk-n,1),1fr);gap:2px}
+.dk-col{position:relative;overflow:hidden}
+.dk-s{position:absolute;inset:0;opacity:0;transition:opacity 1.4s ease}
+.dk-s.on{opacity:1}
+.dk-s img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1);transition:transform 0s 1.4s;will-change:transform}
+.dk-s.on img{transform:scale(1.08);transition:transform 9s ease-out}
+.dk::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(6,21,29,.5) 0%,rgba(6,21,29,.1) 40%,rgba(6,21,29,.9) 100%)}
+.dk-in{position:relative;z-index:2;max-width:900px;padding:clamp(24px,6vw,72px)}
+.dk-flag{display:flex;width:84px;height:4px;border-radius:2px;overflow:hidden}.dk-flag i{flex:1}
+.dk-eye{margin:16px 0 10px;font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:#e6ad47}
+.dk h2{margin:0 0 14px;font-family:inherit;font-weight:700;font-size:clamp(30px,5.2vw,62px);line-height:1.05;color:#f4f0e7}
+.dk-sub{margin:0;font-size:clamp(15px,1.6vw,18px);color:rgba(244,240,231,.82)}
+@media (prefers-reduced-motion:reduce){.dk-s,.dk-s img{transition:none!important}}
+</style>
+<script>
+(function(){var root=document.querySelector('[data-dk]');if(!root)return;
+var stage=root.querySelector('.dk-stage'),src=[].map.call(root.querySelectorAll('.dk-pool li'),function(l){return l.dataset.src}),
+mq=matchMedia('(min-width:900px)'),rm=matchMedia('(prefers-reduced-motion:reduce)'),t=[];
+function run(sl,c){var i=0;requestAnimationFrame(function(){requestAnimationFrame(function(){sl[0].classList.add('on')})});
+if(rm.matches||sl.length<2)return;
+t.push(setTimeout(function(){t.push(setInterval(function(){if(document.hidden)return;sl[i].classList.remove('on');i=(i+1)%sl.length;sl[i].classList.add('on')},7000))},c*2300))}
+function build(){t.forEach(clearInterval);t=[];stage.innerHTML='';var n=mq.matches?3:1;stage.style.setProperty('--dk-n',n);
+for(var c=0;c<n;c++){var col=document.createElement('div');col.className='dk-col';
+var sl=src.filter(function(_,i){return i%n===c}).map(function(u,k){var s=document.createElement('div');s.className='dk-s';var im=new Image();im.alt='';im.decoding='async';if(k)im.loading='lazy';im.src=u;s.appendChild(im);col.appendChild(s);return s});
+stage.appendChild(col);run(sl,c)}}
+build();if(mq.addEventListener)mq.addEventListener('change',build);else mq.addListener(build)})();
+</script>
+<!-- ===== FIN SECTION DAKAR ===== -->
+
+<div class="pv">Suite du site…</div></body></html>
