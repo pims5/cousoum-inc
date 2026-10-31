@@ -1,0 +1,125 @@
+@media (max-width: 899px) {
+  .dk {
+    min-height: min(75vh, 620px);
+  }
+}
+
+.dk {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: min(92vh, 880px);
+  background: #06151d center/cover no-repeat;
+  color: #f4f0e7;
+  overflow: hidden;
+  isolation: isolate;
+  border-top: 1px solid rgba(244, 240, 231, 0.12);
+}
+
+.dk-stage {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(var(--dk-n, 1), 1fr);
+  gap: 2px;
+}
+
+.dk-col {
+  position: relative;
+  overflow: hidden;
+}
+
+.dk-s {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.4s ease, transform 1.4s ease;
+}
+
+.dk-s.on {
+  opacity: 1;
+}
+
+.dk-s img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: scale(1);
+  transition: transform 0s 1.4s;
+  will-change: transform;
+}
+
+.dk-s.on img {
+  transform: scale(1.08);
+  transition: transform 9s ease-out;
+}
+
+.dk::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(6, 21, 29, 0.52) 0%, rgba(6, 21, 29, 0.12) 38%, rgba(6, 21, 29, 0.9) 100%);
+}
+
+.dk-in {
+  position: relative;
+  z-index: 2;
+  max-width: 900px;
+  padding: clamp(24px, 6vw, 72px);
+}
+
+.dk-flag {
+  display: flex;
+  width: 84px;
+  height: 4px;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.dk-flag i {
+  flex: 1;
+}
+
+.dk-flag i:nth-child(1) {
+  background: #00853f;
+}
+
+.dk-flag i:nth-child(2) {
+  background: #fdef42;
+}
+
+.dk-flag i:nth-child(3) {
+  background: #e31b23;
+}
+
+.dk-eye {
+  margin: 16px 0 10px;
+  font-size: 13px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #e6ad47;
+}
+
+.dk h2 {
+  margin: 0 0 14px;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: clamp(30px, 5.2vw, 62px);
+  line-height: 1.05;
+  color: #f4f0e7;
+}
+
+.dk-sub {
+  margin: 0;
+  font-size: clamp(15px, 1.6vw, 18px);
+  color: rgba(244, 240, 231, 0.82);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dk-s,
+  .dk-s img {
+    transition: none !important;
+  }
+}
