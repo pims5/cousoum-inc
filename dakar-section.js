@@ -1,79 +1,103 @@
 (function () {
+  'use strict';
+
   const root = document.querySelector('[data-dk]');
   if (!root) return;
 
   const stage = root.querySelector('.dk-stage');
-  const src = Array.from(root.querySelectorAll('.dk-pool li')).map((el) => el.dataset.src).filter(Boolean);
+  if (!stage) return;
+
+  // Keep the slideshow limited to files present in this repository.
+  const sources = Array.from(root.querySelectorAll('.dk-pool li'))
+    .map((item) => item.dataset.src)
+    .filter((source) => source && !/dakar-04\.webp(?:$|[?#])/i.test(source));
   const mq = matchMedia('(min-width: 900px)');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const timers = [];
 
   function clearTimers() {
-    timers.forEach((timer) => clearTimeout(timer));
+    timers.forEach((timer) => {
+      clearTimeout(timer);
+      clearInterval(timer);
+    });
     timers.length = 0;
   }
 
-  function run(slides, colIndex) {
-    if (!slides.length) return;
-    const first = slides[0];
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => first.classList.add('on'));
-    });
+  function show(slides, index) {
+    slides.forEach((slide, slideIndex) => slide.classList.toggle('on', slideIndex === index));
+  }
 
+  function fallbackUrl(source) {
+    return source.replace(/dakar-\d{2}(?=\.webp(?:$|[?#]))/i, 'dakar-01');
+  }
+
+  function run(slides, columnIndex) {
+    if (!slides.length) return;
+    requestAnimationFrame(() => requestAnimationFrame(() => show(slides, 0)));
     if (reduced.matches || slides.length < 2) return;
 
-    const delay = colIndex * 2300;
-    const timeoutId = setTimeout(() => {
+    const timeout = setTimeout(() => {
       let index = 0;
-      const intervalId = setInterval(() => {
+      const interval = setInterval(() => {
         if (document.hidden) return;
-        slides[index].classList.remove('on');
         index = (index + 1) % slides.length;
-        slides[index].classList.add('on');
+        show(slides, index);
       }, 7000);
-      timers.push(intervalId);
-    }, delay);
-    timers.push(timeoutId);
+      timers.push(interval);
+    }, columnIndex * 2300);
+    timers.push(timeout);
   }
 
   function build() {
     clearTimers();
-    stage.innerHTML = '';
-
+    stage.replaceChildren();
     const columns = mq.matches ? 3 : 1;
     stage.style.setProperty('--dk-n', String(columns));
 
-    for (let colIndex = 0; colIndex < columns; colIndex += 1) {
+    for (let columnIndex = 0; columnIndex < columns; columnIndex += 1) {
       const column = document.createElement('div');
       column.className = 'dk-col';
-
-      const slides = src
-        .filter((_, index) => index % columns === colIndex)
-        .map((url, index) => {
+      const slides = sources
+        .filter((_, sourceIndex) => sourceIndex % columns === columnIndex)
+        .map((source) => {
           const slide = document.createElement('div');
           slide.className = 'dk-s';
-
           const image = new Image();
           image.alt = '';
           image.decoding = 'async';
-          if (index > 0) image.loading = 'lazy';
-          image.src = url;
-
+          image.onerror = () => {
+            console.error('Dakar slideshow image failed to load:', image.src);
+            image.onerror = null;
+            const fallback = fallbackUrl(source);
+            if (fallback !== source) {
+              image.onerror = () => {
+                console.error('Dakar slideshow fallback image failed to load:', image.src);
+                image.onerror = null;
+                slide.remove();
+              };
+              image.src = fallback;
+            } else {
+              slide.remove();
+            }
+          };
+          image.src = source;
           slide.appendChild(image);
+          column.appendChild(slide);
           return slide;
         });
-
-      slides.forEach((slide) => column.appendChild(slide));
       stage.appendChild(column);
-      run(slides, colIndex);
+      run(slides, columnIndex);
     }
   }
 
   build();
+  const onMediaChange = () => build();
+  if (mq.addEventListener) mq.addEventListener('change', onMediaChange);
+  else if (mq.addListener) mq.addListener(onMediaChange);
 
-  if (mq.addEventListener) {
-    mq.addEventListener('change', build);
-  } else if (mq.addListener) {
-    mq.addListener(build);
-  }
+  window.addEventListener('pagehide', () => {
+    clearTimers();
+    if (mq.removeEventListener) mq.removeEventListener('change', onMediaChange);
+    else if (mq.removeListener) mq.removeListener(onMediaChange);
+  }, { once: true });
 })();
