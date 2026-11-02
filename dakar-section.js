@@ -28,7 +28,7 @@
   }
 
   function fallbackUrl(source) {
-    return source.replace(/dakar-\\d{2}\\.webp(?=$|[?#])/i, 'dakar-01.webp');
+    return source.replace(/dakar-\d{2}(?=\.webp(?:$|[?#]))/i, 'dakar-01');
   }
 
   function run(slides, columnIndex) {
@@ -66,11 +66,19 @@
           image.alt = '';
           image.decoding = 'async';
           image.onerror = () => {
-            console.error('Dakar slideshow image failed to load:', source);
+            console.error('Dakar slideshow image failed to load:', image.src);
             image.onerror = null;
             const fallback = fallbackUrl(source);
-            if (fallback !== source) image.src = fallback;
-            else slide.remove();
+            if (fallback !== source) {
+              image.onerror = () => {
+                console.error('Dakar slideshow fallback image failed to load:', image.src);
+                image.onerror = null;
+                slide.remove();
+              };
+              image.src = fallback;
+            } else {
+              slide.remove();
+            }
           };
           image.src = source;
           slide.appendChild(image);
