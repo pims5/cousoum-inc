@@ -7,7 +7,7 @@
   const stage = root.querySelector('.dk-stage');
   if (!stage) return;
 
-  // dakar-04.webp is absent; use only the image files present in the repository.
+  // Keep the slideshow limited to files present in this repository.
   const sources = Array.from(root.querySelectorAll('.dk-pool li'))
     .map((item) => item.dataset.src)
     .filter((source) => source && !/dakar-04\.webp(?:$|[?#])/i.test(source));
@@ -25,6 +25,10 @@
 
   function show(slides, index) {
     slides.forEach((slide, slideIndex) => slide.classList.toggle('on', slideIndex === index));
+  }
+
+  function fallbackUrl(source) {
+    return source.replace(/dakar-\\d{2}\\.webp(?=$|[?#])/i, 'dakar-01.webp');
   }
 
   function run(slides, columnIndex) {
@@ -64,7 +68,8 @@
           image.onerror = () => {
             console.error('Dakar slideshow image failed to load:', source);
             image.onerror = null;
-            if (!/dakar-01\.webp(?:$|[?#])/i.test(source)) image.src = 'dakar-01.webp';
+            const fallback = fallbackUrl(source);
+            if (fallback !== source) image.src = fallback;
             else slide.remove();
           };
           image.src = source;
@@ -78,6 +83,13 @@
   }
 
   build();
-  if (mq.addEventListener) mq.addEventListener('change', build);
-  else if (mq.addListener) mq.addListener(build);
+  const onMediaChange = () => build();
+  if (mq.addEventListener) mq.addEventListener('change', onMediaChange);
+  else if (mq.addListener) mq.addListener(onMediaChange);
+
+  window.addEventListener('pagehide', () => {
+    clearTimers();
+    if (mq.removeEventListener) mq.removeEventListener('change', onMediaChange);
+    else if (mq.removeListener) mq.removeListener(onMediaChange);
+  }, { once: true });
 })();
